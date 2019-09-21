@@ -1,24 +1,28 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[4]:
+# In[6]:
 
 
 import os
-from torch.utils.data import Dataset, DataLoader
+import torch
+from torch.utils.data import Dataset
 from torchvision import transforms, utils
 from PIL import Image
 import torchvision
 import torchvision.transforms as transforms
 
 class DogsandCatsDataset(Dataset):
+    """
+    Class to represent the Dogs and Cats dataset
+    """
     def __init__(self, root_dir, im_size=224):
         """
         root_dir: directory with images of cats/dogs
         im_size: integer representing pixel size of image (default 224)
         """
         self.root_dir = root_dir
-        self.all_imgs = os.listdir()
+        self.all_imgs = os.listdir(root_dir)
         self.im_size = im_size
         
     def __getitem__(self, idx):
@@ -40,10 +44,10 @@ class DogsandCatsDataset(Dataset):
         sample = {"image": inputTensor, "class": correct}
         return sample
 
-dataset = DogsandCatsDataset("./data")
-sample = dataset[1]
-print(sample["image"].shape)
-print(sample["class"].shape)
+# dataset = DogsandCatsDataset("./data/")
+# sample = dataset[1]
+# print(sample["image"].shape)
+# print(sample["class"].shape)
 
 
 # In[ ]:
