@@ -64,6 +64,7 @@ class GImagesScraper(object):
         """
         browser = self.browser
         max_images = self.max_images
+        images = []
         images_on_page = 0
         prev_images_on_page = 0
         print('Images on page ', end='')
@@ -82,17 +83,7 @@ class GImagesScraper(object):
             # Note: currently the button is always present but hidden. Still,
             # clicking it doesn't hurt.
             selector = ".ksb[value='Show more results']"
-            try:
-                print("Found button")
-                # fetch_more_button = browser.find_element_by_css_selector(
-                #     "#smbw.ksb._kvc")
-                # fetch_more_button = browser.find_element_by_id(
-                #     "smb"
-                # )
-                fetch_more_button = browser.find_element_by_css_selector(selector)
-            except:
-                print("Didn't find button")
-                fetch_more_button = None
+            fetch_more_button = browser.find_element_by_css_selector(selector)
 
             if fetch_more_button:
                 browser.execute_script(
@@ -154,9 +145,3 @@ class GImagesScraper(object):
             len(image_urls), query, time_elapsed))
 
         return list(image_urls)
-
-
-if __name__ == "__main__":
-    gis = GImagesScraper()
-    res = gis.get_images("cats", max_images=1000)
-    print(res)
