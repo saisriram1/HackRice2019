@@ -1,28 +1,12 @@
-import httplib2
-import datetime
 import time
 import os
-import selenium
-import json
-import boto3
-import requests
-from dateutil.parser import parse
-import http
 import json
 
 from selenium import webdriver
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from timeit import default_timer as timer
 
 from config import Config
-
-CHROMEDRIVER_PATH = Config.ROOT.joinpath('./vendor/chromedriver.exe').as_posix()
 
 
 class GImagesScraper(object):
@@ -44,7 +28,7 @@ class GImagesScraper(object):
         """ Create a ChromeDriver-based Selenium browser. """
         options = Options()
         options.headless = True
-        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
+        driver = webdriver.Chrome(executable_path=Config.CHROMEDRIVER_PATH, options=options)
         return driver
 
     @staticmethod
