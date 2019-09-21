@@ -61,7 +61,7 @@ class GImagesScraper(object):
     def _find_images_on_page(self):
         """ Keep scrolling down on the page until we get the desired
             number of images, or until no new images are loading.
-            """
+        """
         browser = self.browser
         max_images = self.max_images
         images_on_page = 0
@@ -81,17 +81,23 @@ class GImagesScraper(object):
             # Click the fetch more button if present
             # Note: currently the button is always present but hidden. Still,
             # clicking it doesn't hurt.
-            # fetch_more_button = WebDriverWait(browser, 10).until(
-            #     EC.presence_of_element_located((By.CSS_SELECTOR, "#smbw.ksb"))
-            # )
+            selector = ".ksb[value='Show more results']"
             try:
-                fetch_more_button = browser.find_element_by_css_selector(
-                    "#smbw.ksb._kvc")
+                print("Found button")
+                # fetch_more_button = browser.find_element_by_css_selector(
+                #     "#smbw.ksb._kvc")
+                # fetch_more_button = browser.find_element_by_id(
+                #     "smb"
+                # )
+                fetch_more_button = browser.find_element_by_css_selector(selector)
             except:
+                print("Didn't find button")
                 fetch_more_button = None
+
             if fetch_more_button:
                 browser.execute_script(
-                    "document.querySelector('.ksb._kvc').click();")
+                    f"document.querySelector(\".ksb[value=\'Show more results\']\").click();")
+                # '.ksb._kvc'
         return images
 
     def get_images(self, query, max_images=1000,
@@ -152,5 +158,5 @@ class GImagesScraper(object):
 
 if __name__ == "__main__":
     gis = GImagesScraper()
-    res = gis.get_images("cats", max_images=10)
+    res = gis.get_images("cats", max_images=1000)
     print(res)
