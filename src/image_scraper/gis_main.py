@@ -14,7 +14,15 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from timeit import default_timer as timer
+
+from config import Config
+
+CHROMEDRIVER_PATH = Config.ROOT.joinpath('./vendor/chromedriver.exe').as_posix()
 
 
 class GImagesScraper(object):
@@ -33,20 +41,11 @@ class GImagesScraper(object):
 
     @staticmethod
     def _get_browser():
-        """ Create a Phantom.JS-based Selenium browser. """
-        dcap = dict(DesiredCapabilities.PHANTOMJS)
-        user_agent = (
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36")
-        dcap["phantomjs.page.settings.userAgent"] = user_agent
-        dcap["phantomjs.page.settings.javascriptEnabled"] = True
-        # AWS Lambda path of phantom.js
-        phantom_js_path = './scrape_images/vendor/phantomjs'
-
-        return webdriver.PhantomJS(
-            service_log_path=os.path.devnull,
-            executable_path=phantom_js_path,
-            service_args=['--ignore-ssl-errors=true'],
-            desired_capabilities=dcap)
+        """ Create a ChromeDriver-based Selenium browser. """
+        options = Options()
+        options.headless = True
+        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
+        return driver
 
     @staticmethod
     def _scroll_to_bottom(browser):
@@ -82,8 +81,14 @@ class GImagesScraper(object):
             # Click the fetch more button if present
             # Note: currently the button is always present but hidden. Still,
             # clicking it doesn't hurt.
-            fetch_more_button = browser.find_element_by_css_selector(
-                ".ksb._kvc")
+            # fetch_more_button = WebDriverWait(browser, 10).until(
+            #     EC.presence_of_element_located((By.CSS_SELECTOR, "#smbw.ksb"))
+            # )
+            try:
+                fetch_more_button = browser.find_element_by_css_selector(
+                    "#smbw.ksb._kvc")
+            except:
+                fetch_more_button = None
             if fetch_more_button:
                 browser.execute_script(
                     "document.querySelector('.ksb._kvc').click();")
@@ -147,5 +152,5 @@ class GImagesScraper(object):
 
 if __name__ == "__main__":
     gis = GImagesScraper()
-    res = gis.get_images("cats", 2000)
-    print(len(res), res)
+    res = gis.get_images("cats", max_images=10)
+    print(res)
