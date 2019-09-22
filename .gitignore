@@ -415,8 +415,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-./model/*.pt
-./downloads/*.jpeg
+*.pt
+*.jpeg
 *.zip 
 
 # End of https://www.gitignore.io/api/venv,react,linux,macos,flask,python,windows,pycharm+all,intellij+all,jupyternotebooks
