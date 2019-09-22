@@ -57,7 +57,7 @@ toggle() {
   }
 
 handleSubmit(event) {
-        alert("Reached here");
+        alert("Requests received! picaisso will deliver to your email once its done. :) ");
     const data = {q1:this.state.query1, q2: this.state.query2, email: this.state.email, url: this.state.url};
 
     fetch('http://10.126.179.87:5000/picaisso/', {
