@@ -1,12 +1,22 @@
 .App {
-  display: flex;
+  /* display: flex;
+  width: 2000px; */
   /* align-items: center; */
-  justify-content: center;
+  /* justify-content: center; */
+  text-align: center;
+  height: 1000px;
 }
 .fields{
         /* display: flex; */
         /* align-items: flex-start; */
 }
+.logo{
+        color: #dc303f;
+}
+.question{
+        color: grey;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;

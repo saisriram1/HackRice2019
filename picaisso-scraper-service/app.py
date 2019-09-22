@@ -34,7 +34,7 @@ def api_post():
                 url = query
             else:
                 print(f"Now scraping for query {query}")
-                workflow(query)
+                # workflow(query)
                 classes.append(query)
 
         res = requests.post('http://10.126.179.87:5050/inference/', json={"url": url})
@@ -145,4 +145,4 @@ def workflow(query):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='10.126.179.87', port=5000)
+    app.run(host='10.126.179.87', port=5000)

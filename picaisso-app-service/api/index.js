@@ -1,86 +1,77 @@
-const express = require('express')
-const cors = require('cors')
-const mysql = require('mysql')
+// const express = require('express');
+// const cors = require('cors');
+// const mysql = require('mysql');
+// const bodyParser = require('body-parser');
+//
+// const app = express()
+// app.use(cors())
+//
+// app.use(bodyParser.json() );       // to support JSON-encoded bodies
+// app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+//   extended: true
+// }));
+//
+// app.use(express.json());       // to support JSON-encoded bodies
+// app.use(express.urlencoded());       // to support JSON-encoded bodies
+//
+//
+//
+// var epoch = null;
+// var accuracy = null;
+//
+// var download_model= '';
+// var download_images= '';
+//
+// app.post('/download', (req, res) => {
+//         console.log("Download posted");
+//         download_model = req.body.model_dl_link;
+//         download_images = req.body.dataset_dl_link;
+//         res.send("Received POST request");
+// })
+//
+// app.get('/generations', (_req, res) => {
+//   res.json({"epoch": epoch, "accuracy": accuracy});
+// });
+//
+// app.post('/', (req, res) => {
+//   epoch = req.body.epoch;
+//   accuracy = req.body.accuracy;
+//
+//   console.log("Epoch: "+epoch);
+//   console.log("Accuracy: "+accuracy);
+//   res.send("");
+// });
+//
+//
+// app.listen(4000);
 
-const connection = mysql.createConnection({
-        host: "35.193.255.40",
-        user: "shryans",
-        password: "shryans",
-        database:"mydb"
-})
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var port = process.env.PORT || 4000;
+const cors = require('cors');
 
-connection.connect((err) => {
-        console.log("Reached connection string");
-        if(connection.is_connected){
-                console.log("Connected!");
-        }
-        if (err) {
-                console.log(err)
-        }
-})
+const app = express();
+app.use(cors());
 
-console.log(connection)
+app.use(bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 
-const app = express()
-app.use(cors())
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded());       // to support JSON-encoded bodies
 
-app.get('/', (_req, res) => {
-  res.send('Hello from server. Go to <a href="/teams">Teams</a>')
-})
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
-app.get('/hello', (_req, res) => {
-  const CREATE_TABLE = "CREATE TABLE first_table";
-  connection.query(CREATE_TABLE, (err, teams) => {
-    if (err) {
-      return res.send(err)
-    } else {
-            console.log("Successfully created table");
-            // return res.json(data)
-    }
-  })
-})
+io.on('connection', function(socket){
+  socket.on('generations', function(msg){
+    io.emit('generations', msg);
+  });
+});
 
-// Example of how get values from MySQL
-app.get('/teams', (_req, res) => {
-  const SELECT_ALL_TEAMS = 'SELECT * FROM mydb'
-  connection.query(SELECT_ALL_TEAMS, (err, teams) => {
-    const data = {
-      data: teams
-    }
-    if (err) {
-      return res.send(err)
-    } else {
-      return res.json(data)
-    }
-  })
-})
-
-// Example of how ADD VALUE in MySQL with GET (also works for POST)
-app.get('/teams/add', (req, res) => {
-  const { name, description } = req.query
-  const ADD_TEAM = `INSERT INTO teams (name, description) VALUES ('${name}', '${description}');`
-  connection.query(ADD_TEAM, (err, _teams) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send('Equipo agregado')
-    }
-  })
-})
-
-// With the same logic of before delete Value from MySQL
-app.get('/teams/delete', (req, res) => {
-  const { id } = req.query
-  const DELETE_TEAM = `DELETE FROM teams WHERE id = ${id};`
-  connection.query(DELETE_TEAM, (err, _teams) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send('Equipo eliminado')
-    }
-  })
-})
-
-app.listen(4000, () => {
-  console.log('Listening on port 4000')
-})
+http.listen(port, function(){
+  console.log('listening on *:' + port);
+});
