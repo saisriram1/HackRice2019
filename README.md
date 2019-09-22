@@ -1,5 +1,5 @@
 # picaisso.
-Two central problems in AI are 1) the lack of scalable datasets, and 2) the sheer amount of knowledge and resources someone needs to build a model. Picaisso targets these problems simultaneously by taking care of dataset collection and model training for you. Picaisso will compute a suitable dataset to train a general-purpose deep-learning classifier for any two classes you want. Better yet, Picaisso will provide you with the dataset of images from the two classes as well as the classifier itself. We automate everything. **Classification simplified.**
+Two central problems in AI are 1) the **lack of scalable datasets**, and 2) the **sheer amount of knowledge and resources someone needs to build a model**. Picaisso targets these problems simultaneously by taking care of dataset collection and model training for you. Picaisso will compute a suitable dataset to train a general-purpose deep-learning classifier for any two classes you want. Better yet, Picaisso will **provide you with the dataset of images from the two classes as well as the classifier itself**. We automate everything; it's as simple as typing the classes you want to distinguish between. **Classification simplified.**
 
 ## Stack 
 
