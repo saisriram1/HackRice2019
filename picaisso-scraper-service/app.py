@@ -34,7 +34,7 @@ def api_post():
                 url = query
             else:
                 print(f"Now scraping for query {query}")
-                # workflow(query)
+                workflow(query)
                 classes.append(query)
 
         res = requests.post('http://10.126.179.87:5050/inference/', json={"url": url})
@@ -89,7 +89,7 @@ def send_email(receiver_email, filename, dataset, class_idx, classes):
            I've built your personalized dataset and model. <br>
            Download your dataset <a href="http://10.126.179.87:5000/picaisso/dataset">here.</a><br>
            Download your model <a href="http://10.126.179.87:5000/picaisso/dataset">here.</a><br>""" \
-+ f'Oh, and we believe your image is a {classes[class_idx]}' + \
++ f'Oh, and we believe your image is part of the class: {classes[class_idx]}.<br>' + \
            """Thanks for using Picaisso!<br><br>
            - Team Picaisso
         </p>
