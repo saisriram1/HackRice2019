@@ -1,9 +1,12 @@
 import numpy as np
-import os
 from PIL import Image
+import io
+import os
 from io import BytesIO
 import base64
 import requests
+import tempfile
+from fnvhash import fnv1a_64
 from timeit import default_timer as timer
 
 
@@ -63,10 +66,42 @@ def convert_bytes_to_numpy(img_bytes):
     return img_np_array
 
 
+# def read_convert_image_from_url(url):
+#     """ Read the image and convert it to Numpy array. """
+#     # Get the image as in memory file-like object
+#     response = requests.get(url, stream=True)
+#     img_bytes = BytesIO(response.content)
+#     return convert_bytes_to_numpy(img_bytes)
+
+
+def convert_bytes_to_jpeg(img_bytes):
+    """ Convert an image (as BytesIO in-memory buffer) to JPEG. """
+    # Convert to another file-like buffer but in JPEG format
+    img_bytes_converted = BytesIO()
+    img_bytes.flush()
+    # Rewind to beginning of buffer, so PIL can read it
+    img_bytes.seek(0)
+    Image.open(img_bytes).convert('RGB').save(
+        img_bytes_converted, format='JPEG')
+    img_bytes_converted.seek(0)
+    return img_bytes_converted
+
+
 def read_convert_image_from_url(url):
-    """ Read the image and convert it to Numpy array. """
+    """ Read the image and convert it to JPG. """
     # Get the image as in memory file-like object
     response = requests.get(url, stream=True)
     img_bytes = BytesIO(response.content)
-    return convert_bytes_to_numpy(img_bytes)
+    return convert_bytes_to_jpeg(img_bytes)
 
+
+def save_image(url, download_dir):
+    """ Download the image and save. """
+    r = requests.get(url, stream=True)
+    # print(convert_bytes_to_numpy(BytesIO(r.content)))
+    data = read_convert_image_from_url(url)
+    hashed = str(fnv1a_64(url.encode('utf-8')))
+    filename = hashed + '.jpeg'
+    key = os.path.join(download_dir, filename)
+    with open(key, 'wb') as f:
+        f.write(data.read())

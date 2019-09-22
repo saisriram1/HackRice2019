@@ -9,8 +9,8 @@ from timeit import default_timer as timer
 from config import Config
 
 
-class GImagesScraper(object):
-    """ Scrape Google images"""
+class ImagesScraper(object):
+    """ Scrape images from across the web"""
 
     def __init__(self):
         self.browser = self.__class__._get_browser()
