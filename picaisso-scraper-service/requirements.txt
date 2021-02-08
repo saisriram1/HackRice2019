@@ -1,6 +1,6 @@
 boto3==1.9.233
 fnvhash==0.1.0
-httplib2==0.13.1
+httplib2==0.19.0
 mysql-connector-python==8.0.17
 numpy==1.17.2
 olefile==0.46
