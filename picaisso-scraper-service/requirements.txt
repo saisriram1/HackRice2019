@@ -4,7 +4,7 @@ httplib2==0.13.1
 mysql-connector-python==8.0.17
 numpy==1.17.2
 olefile==0.46
-pillow==6.1.0
+pillow==8.3.2
 pip-chill==0.1.8
 requests==2.22.0
 selenium==3.141.0
